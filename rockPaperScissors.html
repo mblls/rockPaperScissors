@@ -1,0 +1,100 @@
+<script>
+    // plays 1 round for the compiter
+    function computerPlay() {
+        console.log("the computer is thinking")
+        let choices = ["rock", "paper", "scissors"]
+        let random = Math.floor(Math.random() * 3) // between 0 and 2
+        let result = choices[random]
+        console.log(result)
+        return result
+    }
+
+    
+    function aRound(roundNumber) {
+        // question player on which weapon they will duel with 
+        let playerChoice = prompt("It's round "+ roundNumber + ". So rock, Paper, or the Scissors?: ", "rock")
+
+        // We don't want to care how the player inputs their value, so we make it case insensitive
+        // we also assign the player's choice a value
+        playerChoice = playerChoice.toLowerCase()
+        console.log(playerChoice)
+        // Make sure the player's choice is actually a valid choice
+        if (playerChoice != "rock" && playerChoice != "paper" && playerChoice != "scissors"){
+            playerChoice = prompt("Please enter a choice between the rocks, papyrus, or Narsíl: ", "rock")
+        }
+
+        // We then make the computer play a round
+        computerChoice = computerPlay()
+
+        // Here we see who won the round between the player and computer
+        if ((playerChoice == "rock" && computerChoice == "paper") || 
+            (playerChoice == "paper" && computerChoice == "scissors") ||
+            (playerChoice == "scissors" && computerChoice == "rock")){
+            console.log("Computer won the round!\nPrepare for end times!")
+            return "computerWins"
+        }
+        else if (computerChoice == playerChoice){
+            console.log("Tie!\nHow efficient!")
+            return "tie"
+        }
+        else {
+            console.log("Player won the round!!\nGo User!")
+            return "playerWins"
+        }
+    }
+    // we pass in our number of wins for 
+    // each parameter as an array, and then 
+    // update that array each time we run a round,
+    // that's 1 game played
+    function Game(returnArray, roundNumber){
+        console.log("starting round " + roundNumber)
+        // run a round
+        roundOutcome = aRound(roundNumber)
+        switch(roundOutcome){
+            case "playerWins":
+                returnArray[0] += 1
+                return returnArray
+            case "computerWins":
+                returnArray[1] += 1
+                return returnArray
+            case "tie":
+                returnArray[2] += 1
+                return returnArray
+        }
+    }
+
+    // main function is the only function needed to be called
+    // to start the game
+    function main(){
+        playerWins = 0
+        ComputerWins = 0
+        ties = 0
+        returnArray = [playerWins, ComputerWins, ties]
+
+        let arrayFunct = function(){
+            for (i=1; i<=4; i++){
+                returnArray = Game(returnArray, i)
+            } 
+        }
+        
+        arrayFunct()
+        
+        if (returnArray[0]== returnArray[1] || returnArray[1] == returnArray[2] || returnArray[0] == returnArray[2]){
+            console.log("NOT DEFINITIVE. PLAY AGAIN")
+            arrayFunct()
+            return
+        }
+        // who has the most wins?
+        gameResult = Math.max(...returnArray)
+
+        switch(gameResult){
+            case 0:prompt("A user was victorious!", "whoo!"); break
+            case 1:prompt("A computer was victorious!", "oh shit!"); break 
+            case 2:prompt("No one won, please leave me alone!", "so rude jesus..."); break
+        }
+    }
+
+    main()
+
+    
+</script>
